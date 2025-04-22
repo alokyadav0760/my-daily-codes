@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>"Tere Liye" Reel</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body, html { width: 100%; height: 100%; overflow: hidden; background: #000; }
+    #reel { position: relative; width: 100%; height: 100%; }
+    .segment {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      width: 100%; height: auto;
+      max-height: 100%;
+    }
+
+    /* 🌅 0–5s Dawn of Love: FadeIn + Zoom */
+    #gif1 { animation: fadeInZoom 5s forwards ease-in; }
+
+    /* ❤️ 5–10s Heart-Beat Pulse */
+    #gif2 { animation: heartbeat 5s 5s forwards ease-in-out; }
+
+    /* 🥀 10–15s Longing Gaze: Cross-fade */
+    #gif3 { animation: crossFade 5s 10s forwards; }
+
+    /* 🛤 15–20s Journey Together: Swipe In */
+    #gif4 { animation: swipeIn 5s 15s forwards ease-out; }
+
+    /* 💓 20–25s Neon Heart Bloom: Flash-Cut Flicker */
+    #gif5 { animation: flicker 5s 20s forwards steps(6, end); }
+
+    /* 🕯 25–30s Chorus Embrace: Bloom + Slow Zoom */
+    #gif6 { animation: bloomSlow 5s 25s forwards ease-in-out; }
+
+    /* 🔒 30–35s Forever Promise: Fade-Out Sparkle */
+    #gif7 { animation: fadeOutSparkle 5s 30s forwards ease-out; }
+
+    @keyframes fadeInZoom {
+      0% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
+      100% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+    }
+    @keyframes heartbeat {
+      0%, 100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+      10%, 30%, 50%, 70%, 90% { transform: translate(-50%, -50%) scale(1.2); }
+    }
+    @keyframes crossFade {
+      0% { opacity: 0; }
+      50% { opacity: 1; }
+      100% { opacity: 1; }
+    }
+    @keyframes swipeIn {
+      0% { opacity: 0; transform: translate(-150%, -50%); }
+      100% { opacity: 1; transform: translate(-50%, -50%); }
+    }
+    @keyframes flicker {
+      0% { opacity: 1; filter: brightness(1); }
+      20% { opacity: 0.4; filter: brightness(0.6); }
+      40% { opacity: 1; filter: brightness(1.4); }
+      60% { opacity: 0.5; filter: brightness(0.7); }
+      80% { opacity: 1; filter: brightness(1); }
+      100% { opacity: 1; }
+    }
+    @keyframes bloomSlow {
+      0% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
+      100% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+    }
+    @keyframes fadeOutSparkle {
+      0% { opacity: 1; filter: brightness(1); }
+      80% { opacity: 1; filter: brightness(2) drop-shadow(0 0 8px #fff); }
+      100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+    }
+  </style>
+</head>
+<body>
+  <div id="reel">
+    <!-- 🌅 0–5s Dawn of Love -->
+    <img id="gif1" class="segment" src="sunrise.gif" alt="Dawn of Love">
+    <!-- ❤️ 5–10s Heart-Beat Pulse -->
+    <img id="gif2" class="segment" src="heartbeat.gif" alt="Heart-Beat Pulse">
+    <!-- 🥀 10–15s Longing Gaze -->
+    <img id="gif3" class="segment" src="longing.gif" alt="Longing Gaze">
+    <!-- 🛤 15–20s Journey Together -->
+    <img id="gif4" class="segment" src="journey together.gif" alt="Journey Together">
+    <!-- 💓 20–25s Neon Heart Bloom -->
+    <img id="gif5" class="segment" src="neon heart bloom.webp" alt="Neon Heart Bloom">
+    <!-- 🕯 25–30s Chorus Embrace -->
+    <img id="gif6" class="segment" src="embrace.gif" alt="Full Chorus Embrace">
+    <!-- 🔒 30–35s Forever Promise -->
+    <img id="gif7" class="segment" src="forever promise.gif" alt="Forever Promise">
+  </div>
+
+  <script>
+    // Optional: loop the reel automatically after 35s
+    setTimeout(() => { location.reload(); }, 35000);
+  </script>
+</body>
+</html>
