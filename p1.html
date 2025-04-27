@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Virtus GT Engine Start</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #0f0f0f;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .container {
+      text-align: center;
+      position: relative;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .engine-btn, .rev-btn, .stop-btn {
+      background: #ff0000;
+      border: none;
+      border-radius: 50%;
+      width: 100px;
+      height: 100px;
+      font-size: 1rem;
+      color: white;
+      margin: 10px;
+      cursor: pointer;
+      box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+    }
+
+    .engine-btn.started {
+      background: #00ff00;
+      box-shadow: 0 0 20px rgba(0, 255, 0, 0.6);
+    }
+
+    #rpm-gauge {
+      font-size: 2rem;
+      margin: 20px 0;
+    }
+
+    .car-image {
+      width: 400px;
+      transition: 0.3s ease;
+      filter: brightness(0.8);
+    }
+
+    .headlights-on {
+      filter: brightness(1.2) drop-shadow(0 0 30px yellow);
+    }
+
+    .smoke {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 100px;
+      background: url("C:\Users\HP\Desktop\Create\Project 1\smoke.webp") no-repeat center;
+      background-size: contain;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Virtus GT — Start Your Engine</h1>
+    <img id="car" class="car-image" src="C:\Users\HP\Desktop\Create\Project 1\virtus.jpeg" alt="Virtus GT" />
+    <div class="smoke" id="smoke"></div>
+    <div id="rpm-gauge">RPM: 0</div>
+    <div>
+      <button class="engine-btn" onclick="startEngine()">START</button>
+      <button class="rev-btn" onclick="revEngine()">REV</button>
+      <button class="stop-btn" onclick="stopEngine()">STOP</button>
+    </div>
+  </div>
+
+  <audio id="v8" src="C:\Users\HP\Desktop\Create\Project 1\motor-v8-plymouth-barracuda-encendido-acelerada-marcha-243224.mp3"></audio>
+  <audio id="rev-sound" src="C:\Users\HP\Desktop\Create\Project 1\motor-v8-plymouth-barracuda-encendido-acelerada-marcha-243224.mp3"></audio>
+
+  <script>
+    const engineSound = document.getElementById('v8');
+    const revSound = document.getElementById('rev-sound');
+    const car = document.getElementById('car');
+    const smoke = document.getElementById('smoke');
+    const rpmGauge = document.getElementById('rpm-gauge');
+    let rpm = 0;
+    let engineOn = false;
+
+    function startEngine() {
+      engineOn = true;
+      engineSound.play();
+      document.querySelector('.engine-btn').classList.add('started');
+      document.querySelector('.engine-btn').innerText = 'IGNITED';
+      car.classList.add('headlights-on');
+      rpm = 800;
+      rpmGauge.textContent = `RPM: ${rpm}`;
+    }
+
+    function revEngine() {
+      if (!engineOn) return;
+      revSound.currentTime = 0;
+      revSound.play();
+      smoke.style.display = 'block';
+      rpm = 6000;
+      rpmGauge.textContent = `RPM: ${rpm}`;
+      setTimeout(() => {
+        rpm = 1000;
+        rpmGauge.textContent = `RPM: ${rpm}`;
+        smoke.style.display = 'none';
+      }, 1500);
+    }
+
+    function stopEngine() {
+      engineOn = false;
+      engineSound.pause();
+      engineSound.currentTime = 0;
+      document.querySelector('.engine-btn').classList.remove('started');
+      document.querySelector('.engine-btn').innerText = 'START';
+      car.classList.remove('headlights-on');
+      rpm = 0;
+      rpmGauge.textContent = `RPM: ${rpm}`;
+      smoke.style.display = 'none';
+    }
+  </script>
+</body>
+</html>
