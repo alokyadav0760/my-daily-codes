@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Proud of Yourself</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      height: 100vh;
+      font-family: 'Segoe UI', sans-serif;
+      background: #000;
+      color: #fff;
+      overflow: hidden;
+      position: relative;
+    }
+    .quote {
+      position: absolute;
+      width: 100%;
+      top: 5%;
+      text-align: center;
+      font-size: 1.8rem;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+    .floating {
+      font-size: 1.2rem;
+      animation: floatText 4s ease forwards;
+    }
+    .character {
+      width: 150px;
+      height: 300px;
+      position: absolute;
+      bottom: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      border-radius: 20px;
+      background: url("C:\\Users\\HP\\Desktop\\Create\\Project 3\\poor guy.gif") center/cover no-repeat;
+      transition: opacity 1s ease;
+    }
+    @keyframes floatText {
+      0% { opacity: 0; transform: translateY(20px); }
+      50% { opacity: 1; }
+      100% { opacity: 0; transform: translateY(-40px); }
+    }
+    .timeline {
+      position: absolute;
+      bottom: 25%;
+      width: 60%;
+      left: 50%;
+      transform: translateX(-50%);
+      height: 10px;
+      background: #333;
+      border-radius: 5px;
+      overflow: hidden;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+    .progress {
+      width: 0;
+      height: 100%;
+      background: #0f0;
+      transition: width 3s ease;
+    }
+    .label {
+      position: absolute;
+      top: -25px;
+      font-size: 1rem;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+    .label.start { left: 0; }
+    .label.end { right: 0; }
+
+    .final-scene {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      gap: 40px;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+
+    .market, .rich {
+      width: 150px;
+      height: 150px;
+      background-size: cover;
+      background-position: center;
+      border-radius: 20px;
+    }
+
+    .market {
+      background-image: url("C:\\Users\\HP\\Desktop\\Create\\Project 3\\stock market.webp");
+    }
+
+    .rich {
+      background-image: url("C:\\Users\\HP\\Desktop\\Create\\Project 3\\rich guy.gif");
+      border-radius: 50%;
+    }
+  </style>
+</head>
+<body>
+  <div class="quote" id="initial">😔 you are not doing anything in life do something to earn</div>
+  <div class="character" id="character"></div>
+  <div class="quote floating" style="top: 20%; left: 10%; animation-delay: 2s;">"You won't make it."</div>
+  <div class="quote floating" style="top: 30%; right: 10%; animation-delay: 3s;">"It's impossible."</div>
+  <div class="quote floating" style="top: 40%; left: 20%; animation-delay: 4s;">"Be realistic."</div>
+  <div class="timeline" id="timeline">
+    <div class="progress" id="progress"></div>
+    <div class="label start" id="labelStart">20</div>
+    <div class="label end" id="labelEnd">40</div>
+  </div>
+  <div class="final-scene" id="finalScene">
+    <div class="market" title="Stock Market 💸"></div>
+    <div class="rich" title="You made it 💼"></div>
+  </div>
+
+  <script>
+    const initial = document.getElementById('initial');
+    const character = document.getElementById('character');
+    const timeline = document.getElementById('timeline');
+    const progress = document.getElementById('progress');
+    const labelStart = document.getElementById('labelStart');
+    const labelEnd = document.getElementById('labelEnd');
+    const finalScene = document.getElementById('finalScene');
+
+    // Sequence
+    setTimeout(() => initial.style.opacity = '1', 500);
+    setTimeout(() => character.style.opacity = '1', 1500);
+    
+    setTimeout(() => {
+      timeline.style.opacity = '1';
+      progress.style.width = '100%';
+      labelStart.style.opacity = '1';
+      labelEnd.style.opacity = '1';
+    }, 6000);
+
+    // Change quote
+    setTimeout(() => {
+      initial.textContent = '🚀 you made it brooo';
+    }, 9500);
+
+    setTimeout(() => character.style.opacity = '0', 10000);
+    setTimeout(() => finalScene.style.opacity = '1', 11000);
+  </script>
+</body>
+</html>
