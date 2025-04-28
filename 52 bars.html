@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Motivation Engine</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background: #111;
+      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    .screen {
+      position: relative;
+      width: 100%;
+      max-width: 600px;
+      text-align: center;
+    }
+    .quote, .student, .progress-container, .rewards {
+      position: absolute;
+      width: 100%;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+    .quote { top: 30%; font-size: 1.8rem; padding: 0 10px; }
+    .student { top: 40%; }
+    .student img {
+      width: 300px;
+      border-radius: 8px;
+    }
+    .progress-container {
+      top: 55%;
+    }
+    .progress-bar {
+      width: 0;
+      height: 20px;
+      background: #0f0;
+      border-radius: 10px;
+      margin: 0 auto;
+      transition: width 3s ease-in-out;
+    }
+    .progress-text {
+      margin-top: 10px;
+      font-size: 1.2rem;
+    }
+    .rewards {
+      top: 35%;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
+    .rewards img {
+      width: 140px;
+      opacity: 0;
+      transform: scale(0.8);
+      animation: pop 0.6s forwards ease-in-out;
+    }
+    @keyframes pop {
+      to { opacity: 1; transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+  <div class="screen">
+    <div class="quote" id="quote">“The magic you seek is buried in the work you keep avoiding.”</div>
+    <div class="student" id="student">
+      <img src="C:\Users\HP\Desktop\Create\Project 2\student.gif"alt="Student Studying">
+    </div>
+    <div class="progress-container" id="progress">
+      <div class="progress-bar" id="bar"></div>
+      <div class="progress-text" id="progress-text">0%</div>
+    </div>
+    <div class="rewards" id="rewards">
+      <img src="C:\Users\HP\Desktop\Create\Project 2\home.gif" alt="Home">
+      <img src="C:\Users\HP\Desktop\Create\Project 2\car.gif" alt="Car">
+      <img src="C:\Users\HP\Desktop\Create\Project 2\money.webp" alt="Money">
+    </div>
+  </div>
+  <script>
+    const quoteEl = document.getElementById('quote');
+    const studEl = document.getElementById('student');
+    const progEl = document.getElementById('progress');
+    const barEl = document.getElementById('bar');
+    const textEl = document.getElementById('progress-text');
+    const rewardsEl = document.getElementById('rewards');
+
+    function show(el, delay) {
+      setTimeout(() => el.style.opacity = 1, delay);
+    }
+    function hide(el, delay) {
+      setTimeout(() => el.style.opacity = 0, delay);
+    }
+
+    window.onload = () => {
+      show(quoteEl, 500);
+      hide(quoteEl, 3500);
+      show(studEl, 4000);
+      hide(studEl, 7000);
+      setTimeout(() => {
+        show(progEl, 0);
+        barEl.style.width = '100%';
+        let pct = 0;
+        const interval = setInterval(() => {
+          pct += 1;
+          textEl.textContent = pct + '%';
+          if (pct === 100) {
+            clearInterval(interval);
+            textEl.textContent = 'SUCCESS LOADED';
+          }
+        }, 30);
+      }, 7500);
+      setTimeout(() => {
+        hide(progEl, 500);
+      }, 11500);
+      setTimeout(() => {
+        const imgs = rewardsEl.querySelectorAll('img');
+        rewardsEl.style.opacity = 1;
+        imgs.forEach((img, i) => img.style.animationDelay = `${i * 0.3}s`);
+      }, 12000);
+    };
+  </script>
+</body>
+</html>
