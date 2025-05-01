@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Love Letter Reveal</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #fff0f6;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      height: 100vh;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-10vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    @keyframes sparkle {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.3); opacity: 0.7; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .heart {
+      position: absolute;
+      pointer-events: none;
+      animation: float linear infinite;
+      opacity: 0.8;
+    }
+
+    .quote {
+      font-size: 2rem;
+      color: #6a004d;
+      text-align: center;
+      opacity: 0;
+      animation: fadeIn 2s forwards;
+    }
+
+    .love-gif {
+      max-width: 80%;
+      margin-top: 20px;
+      opacity: 0;
+      animation: fadeIn 2s forwards 3s;
+    }
+
+    .letter-container {
+      width: 250px;
+      height: auto;
+      background-color: #fff;
+      border: 2px solid #d63384;
+      border-radius: 10px;
+      margin-top: 20px;
+      position: relative;
+      opacity: 0;
+      animation: fadeIn 2s forwards 3.5s;
+      cursor: pointer;
+      transition: all 0.4s ease;
+    }
+
+    .letter-flap {
+      width: 100%;
+      height: 60px;
+      background-color: #ffd6e8;
+      position: absolute;
+      top: 0;
+      left: 0;
+      border-bottom: 2px solid #d63384;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+      transition: transform 0.5s ease;
+      transform-origin: top;
+      z-index: 2;
+    }
+
+    .letter-open .letter-flap {
+      transform: rotateX(-120deg);
+    }
+
+    .letter-message {
+      padding: 70px 15px 15px 15px;
+      font-size: 1.1rem;
+      color: #6a004d;
+      text-align: center;
+      display: none;
+    }
+
+    .letter-open .letter-message {
+      display: block;
+    }
+
+    .typing {
+      border-right: 2px solid #6a004d;
+      white-space: nowrap;
+      overflow: hidden;
+      animation: typing 3s steps(40, end), blink .75s step-end infinite;
+    }
+
+    @keyframes typing {
+      from { width: 0 }
+      to { width: 100% }
+    }
+
+    @keyframes blink {
+      from, to { border-color: transparent }
+      50% { border-color: #6a004d; }
+    }
+
+    .polaroid {
+      width: 180px;
+      background-color: white;
+      padding: 10px 10px 20px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      margin: 10px auto;
+      text-align: center;
+      border-radius: 6px;
+      position: relative;
+      animation: sparkle 2s infinite;
+    }
+
+    .polaroid img {
+      width: 100%;
+      border-radius: 4px;
+    }
+
+    .polaroid p {
+      margin-top: 10px;
+      font-size: 0.9rem;
+      color: #6a004d;
+    }
+
+    .extra-emoji {
+      margin-top: 10px;
+      font-size: 1.5rem;
+      display: none;
+    }
+
+    .letter-open + .extra-emoji {
+      display: block;
+      animation: fadeIn 1.5s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="quote">Aap mera kaise khyaal rkhogee milne ke baad?</div>
+  <img src="C:\Users\HP\Desktop\Create\Project 4\love.gif" alt="Love" class="love-gif" />
+
+  <div class="letter-container" onclick="openLetter(this)">
+    <div class="letter-flap"></div>
+    <div class="letter-message">
+      <div class="typing">Meri duniya hi khubsoorat ho jaati hai jab tum saath hoti ho.</div>
+      <div class="polaroid">
+        <img src="C:\Users\HP\Desktop\Create\Project 4\image for reel.jpg" alt="Us ❤️">
+        <p>Tera intezaar 🌸</p>
+      </div>
+    </div>
+  </div>
+  <div class="extra-emoji">❤️💌🌹✨</div>
+
+  <script>
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.innerText = '❤️';
+      const size = 10 + Math.random() * 40;
+      heart.style.fontSize = size + 'px';
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.animationDuration = 4 + Math.random() * 4 + 's';
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 8000);
+    }
+    setInterval(createHeart, 500);
+
+    function openLetter(element) {
+      element.classList.toggle('letter-open');
+    }
+  </script>
+</body>
+</html>
