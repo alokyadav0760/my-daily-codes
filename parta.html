@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Reel The Code Sequential Scenes</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+
+    /* Page background */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Montserrat', sans-serif;
+      background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Common scene styling */
+    .scene {
+      position: absolute;
+      width: 90%;
+      max-width: 480px;
+      padding: 30px;
+      box-sizing: border-box;
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      opacity: 0;
+      transition: opacity 0.8s ease-in-out;
+    }
+    .scene.active {
+      opacity: 1;
+    }
+
+    /* Quote styling */
+    .quote {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #2c3e50;
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Reason heading */
+    .reason {
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: #34495e;
+      text-align: left;
+      margin: 1rem 0 1.2rem;
+    }
+
+    /* Media (img/video) styling */
+    .media {
+      width: 100%;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+      display: block;
+      margin: 0 auto;
+    }
+
+    /* Closing CTA */
+    .closing {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #ffffff;
+      background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+      padding: 0.6rem 1.4rem;
+      border-radius: 8px;
+      margin-top: 2rem;
+      display: inline-block;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Scene 1: Opening Quote -->
+  <div id="scene1" class="scene active">
+    <div class="quote">
+      तुम इतने चुप चुप क्यों रहने लगे हो 🤫
+    </div>
+    <!-- Replace with your own image -->
+    <img src="C:\Users\HP\Desktop\Create\Project 5\boy hand in pocket.jpeg"
+         alt="Hands in pockets, standing still" class="media"/>
+  </div>
+
+  <!-- Scene 2: Reason + Image/Video -->
+  <div id="scene2" class="scene">
+    <div class="reason">Reason ➡️</div>
+    <!-- Replace with your own crowd video or image -->
+    <img src="C:\Users\HP\Desktop\Create\Project 5\man in between of crowd.jpeg"
+         alt="Man ignored in crowd" class="media"/>
+    <div class="closing">
+      #ReelTheCode<br/>
+      Follow for more interesting code stories! ✨
+    </div>
+  </div>
+
+  <script>
+    // After 3 seconds, switch scenes
+    setTimeout(() => {
+      document.getElementById('scene1').classList.remove('active');
+      document.getElementById('scene2').classList.add('active');
+    }, 6000); // 3000ms = 3s
+  </script>
+</body>
+</html>
