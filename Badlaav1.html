@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Visual Lyrics Reel</title>
+  <style>
+    /* Reset + base */
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { display:flex; justify-content:center; align-items:center; background:#000; height:100vh; }
+    .wrapper {
+      width:90vw;
+      height:90vh;
+      position:relative;
+      overflow:hidden;
+    }
+
+    /* Scene container */
+    .scene {
+      position:absolute; top:0; left:0;
+      width:100%; height:100%;
+      opacity:0; visibility:hidden;
+      transition: opacity 1s ease, visibility 1s ease;
+    }
+    .scene.active {
+      opacity:1; visibility:visible;
+    }
+
+    /* Video / Image fill */
+    .scene video,
+    .scene img {
+      width:100%; height:100%; object-fit:cover;
+      display:block;
+    }
+
+    /* Glitch flicker for Scene 1 */
+    @keyframes hueFlicker {
+      0%,100% { filter: none; }
+      20% { filter: hue-rotate(45deg) brightness(1.2); }
+      40% { filter: hue-rotate(-30deg) brightness(0.8); }
+      60% { filter: hue-rotate(60deg) brightness(1.1); }
+      80% { filter: none; }
+    }
+    #scene1 video { animation: hueFlicker 0.5s infinite; }
+
+    /* Overlay base */
+    .overlay {
+      position:absolute;
+      color:#fff; text-shadow:0 0 8px rgba(0,0,0,0.8);
+      font-size:2rem; pointer-events:none;
+      white-space:nowrap;
+      animation: fadeInOut 3s ease-in-out infinite;
+    }
+    @keyframes fadeInOut {
+      0%,100% { opacity:0; }
+      25%,75% { opacity:1; }
+    }
+
+    /* Scene-specific overlay tweaks */
+    #scene1 .overlay {
+      top:10%; left:50%; transform:translateX(-50%);
+      font-size:2.5rem;
+      animation-duration:4s;
+      animation-name:fadeInOut, hueFlicker;
+    }
+    #scene2 .overlay {
+      bottom:15%; right:10%;
+      font-size:2rem;
+      animation-name:fadeInOut, bounce;
+    }
+    @keyframes bounce {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+    #scene3 .overlay {
+      top:50%; left:50%; transform:translate(-50%,-50%);
+      font-size:2.2rem;
+      animation-duration:5s;
+    }
+    #scene4 .overlay {
+      top:20%; left:50%; transform:translateX(-50%);
+      font-size:2.5rem; color:orange;
+      animation-duration:3s;
+      text-shadow:0 0 12px rgba(255,165,0,0.8);
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+
+    <!-- Scene 1 -->
+    <div class="scene active" id="scene1">
+      <video src="scene 1.mp4"autoplay muted loop></video>
+      <div class="overlay">💥 Clout ≠ Respect 💥</div>
+    </div>
+
+    <!-- Scene 2 -->
+    <div class="scene" id="scene2">
+      <video src="scene 2.mp4" autoplay muted loop></video>
+      <div class="overlay">💃 #VIRAL 📈</div>
+    </div>
+
+    <!-- Scene 3 (two images) -->
+    <div class="scene" id="scene3">
+      <img id="scene3a" src="scene 3a.jpeg">
+      <img id="scene3b" src="scene 3b.jpeg" style="display:none;">
+      <div class="overlay">⚔️ Divided by Belief 🙏</div>
+    </div>
+
+    <!-- Scene 4 (two images) -->
+    <div class="scene" id="scene4">
+      <img id="scene4a" src="scene 4a.jpeg">
+      <img id="scene4b" src="scene 4b.jpeg" style="display:none;">
+      <div class="overlay">🤡 Hypocrisy Exposed! 🔪</div>
+    </div>
+
+  </div>
+
+  <script>
+    const scenes = ["scene1","scene2","scene3","scene4"];
+    const durations = [5000, 5000, 5000, 5000]; // in ms
+    let current = 0;
+
+    function showScene(idx) {
+      scenes.forEach(id => document.getElementById(id).classList.remove('active'));
+      document.getElementById(scenes[idx]).classList.add('active');
+
+      // handle scene3 image swap
+      if (scenes[idx] === 'scene3') {
+        setTimeout(() => {
+          document.getElementById('scene3a').style.display = 'none';
+          document.getElementById('scene3b').style.display = 'block';
+        }, 3000);
+      }
+      // handle scene4 image swap
+      if (scenes[idx] === 'scene4') {
+        setTimeout(() => {
+          document.getElementById('scene4a').style.display = 'none';
+          document.getElementById('scene4b').style.display = 'block';
+        }, 3500);
+      }
+    }
+
+    // schedule transitions correctly
+    durations.reduce((acc, dur, i) => {
+      setTimeout(() => showScene(i+1), acc + dur);
+      return acc + dur;
+    }, 0);
+  </script>
+</body>
+</html>
