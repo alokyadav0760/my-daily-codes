@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Neon City Drift</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* GLOBAL */
+    html, body { margin:0; padding:0; width:100%; height:100%; background:#000; overflow:hidden; }
+    .container { position:relative; width:100vw; height:100vh; }
+
+    .hidden { opacity:0; }
+
+    /* SCENE 1: TYPING & TEXT GLITCH */
+    #supreme-text {
+      position:absolute; top:40%; left:50%; transform:translateX(-50%);
+      font-family:'Orbitron', sans-serif; font-size:4rem; letter-spacing:.5rem;
+      color:transparent; text-shadow:0 0 8px #0ff,0 0 16px #0ff,0 0 32px #08f;
+      opacity:0;
+    }
+    .text-glitch {
+      animation: textGlitch 0.6s ease-in-out forwards;
+    }
+    @keyframes textGlitch {
+      0%,100%{clip-path:inset(0); transform:none;}
+      25%{clip-path:inset(10% 0 85% 0); transform:translate(-2px,2px);}
+      50%{clip-path:inset(85% 0 10% 0); transform:translate(2px,-2px);}
+      75%{clip-path:inset(40% 0 45% 0); transform:translate(-2px,-2px);}
+    }
+
+    /* SCENE 2: DRIFT */
+    #drift-wrapper {
+      position:absolute; bottom:10%; right:-50%;
+      width:50%; max-width:300px; opacity:0;
+      transition:right 1s ease-out, opacity 1s;
+    }
+    .drift-gif { width:100%; display:block; }
+
+    /* SCENE 3: SKYLINE */
+    #skyline-wrapper {
+      position:absolute; bottom:10%; left:50%; transform:translateX(-50%);
+      display:flex; gap:.5rem; opacity:0;
+    }
+    .building {
+      --h: calc(50px + 20px*var(--i));
+      width:20px; height:var(--h); background:#0ff;
+      transform-origin:bottom; animation:pulse 1s ease-in-out infinite;
+      animation-delay: calc(.1s*var(--i));
+    }
+    @keyframes pulse {0%,100%{transform:scaleY(1);}50%{transform:scaleY(1.5);}}
+    #by-subh {
+      font-family:'Orbitron'; font-size:1.5rem; color:#0ff;
+      margin-left:1rem; opacity:0; transition:opacity 1s ease-in;
+    }
+
+    /* SCENE 4: GRID TUNNEL */
+    #grid-canvas {
+      position:absolute; top:0; left:0; width:100%; height:100%;
+      opacity:0;
+    }
+
+    /* SCENE 5: GLITCH + SHAKE */
+    #glitch-overlay {
+      position:absolute; top:0; left:0; width:100%; height:100%;
+      background:black; mix-blend-mode:difference; pointer-events:none;
+      opacity:0;
+    }
+    .shake {
+      animation: shakeCam 0.5s ease-in-out 4 both;
+    }
+    @keyframes shakeCam {
+      0%,100%{transform:none;}
+      20%{transform:translate(5px,5px);}
+      40%{transform:translate(-5px,-5px);}
+      60%{transform:translate(5px,-5px);}
+      80%{transform:translate(-5px,5px);}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 id="supreme-text"></h1>
+    <div id="drift-wrapper">
+      <img src="cardrift.gif" class="drift-gif"/>
+    </div>
+    <div id="skyline-wrapper">
+      <div class="building" style="--i:0"></div>
+      <div class="building" style="--i:1"></div>
+      <div class="building" style="--i:2"></div>
+      <div class="building" style="--i:3"></div>
+      <div class="building" style="--i:4"></div>
+      <h2 id="by-subh">BY SUBH</h2>
+    </div>
+    <canvas id="grid-canvas"></canvas>
+    <div id="glitch-overlay"></div>
+  </div>
+
+  <script>
+    // Helpers
+    function wait(ms){return new Promise(r=>setTimeout(r,ms));}
+    async function typeText(el, text) {
+      el.style.opacity = 1;
+      for(let i=0;i<text.length;i++){
+        el.textContent += text[i];
+        await wait(200);
+      }
+      el.classList.add('text-glitch');
+    }
+
+    function startGrid(c){
+      const ctx=c.getContext('2d'),w=c.width=innerWidth,h=c.height=innerHeight;let t=0;
+      function draw(){
+        ctx.fillStyle='#000';ctx.fillRect(0,0,w,h);
+        ctx.strokeStyle='#0ff';ctx.lineWidth=1;
+        ctx.save();ctx.translate(w/2,h/2+100);ctx.rotate(-Math.PI/2.2);
+        for(let z=t;z<t+200;z+=20){
+          const s=200/z,y=z-t;
+          ctx.beginPath();ctx.moveTo(-200*s,y);ctx.lineTo(200*s,y);ctx.stroke();
+        }
+        ctx.restore();t+=4;
+        if(t<200) requestAnimationFrame(draw);
+      }
+      draw();
+    }
+
+    function glitchOutro(){
+      const g=document.getElementById('glitch-overlay'), c=document.querySelector('.container');
+      g.style.opacity=1;
+      let cnt=0;
+      const iv=setInterval(()=>{
+        g.style.clipPath=`inset(${Math.random()*15}% 0 ${Math.random()*15}% 0)`;
+        if(++cnt>8){
+          clearInterval(iv);
+          g.style.transition='opacity 1s';
+          g.style.opacity=0;
+          c.classList.add('shake');
+        }
+      },100);
+    }
+
+    // Scene Sequencer
+    (async()=>{
+      const sup=document.getElementById('supreme-text'),
+            drift=document.getElementById('drift-wrapper'),
+            skyline=document.getElementById('skyline-wrapper'),
+            bySubh=document.getElementById('by-subh'),
+            gridCanvas=document.getElementById('grid-canvas');
+
+      // Scene 1 (0–5s)
+      await typeText(sup,'SUPREME');
+      await wait(5000);
+
+      // Scene 2 (5–10s)
+      sup.style.opacity=0;
+      drift.style.opacity=1; drift.style.right='20%';
+      await wait(5000);
+
+      // Scene 3 (10–15s)
+      drift.style.opacity=0;
+      skyline.style.opacity=1;
+      await wait(500); bySubh.style.opacity=1;
+      await wait(4500);
+
+      // Scene 4 (15–20s)
+      skyline.style.opacity=0; bySubh.style.opacity=0;
+      gridCanvas.style.opacity=1;
+      startGrid(gridCanvas);
+      await wait(5000);
+
+      // Scene 5 (20–25s)
+      gridCanvas.style.opacity=0;
+      glitchOutro();
+    })();
+  </script>
+</body>
+</html>
