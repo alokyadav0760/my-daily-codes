@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Son's Love for Father Reel</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body, html { width: 100%; height: 100%; overflow: hidden; font-family: 'Segoe UI', sans-serif; }
+    .container {
+      position: relative;
+      width: 100%; height: 100%;
+      filter: contrast(1.1) brightness(1.05) saturate(1.2) sepia(0.1);
+      background: #111;
+      color: #f0f0f0;
+    }
+    .slide {
+      position: absolute;
+      width: 100%; height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+    .slide.active { opacity: 1; }
+    .slide img, .slide video {
+      max-width: 100%; max-height: 100%;
+      object-fit: cover;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.7);
+    }
+    .slide h1 {
+      background: rgba(0,0,0,0.5);
+      padding: 1rem 2rem;
+      border-radius: 8px;
+      font-size: 2.5rem;
+      animation: pop 0.5s ease;
+    }
+    @keyframes pop {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="reelContainer">
+    <!-- Slides will be injected here -->
+  </div>
+  <script>
+    const slidesData = [
+      { type: 'text', content: "Baapu ke khet mehnat ka dhoop-seeka paat...", duration: 5000 },
+      { type: 'image', src: 'image1.webp', duration: 5000 },
+      { type: 'text', content: "Chhore ne sapne dekh liye ak padh ke kuch banega...", duration: 5000 },
+      { type: 'image', src: 'image2.webp', duration: 5000 },
+      { type: 'text', content: "Din-raat mehnat kari chhore ne… raah na chhodi!", duration: 5000 },
+      { type: 'image', src: 'image3.avif', duration: 5000 },
+      { type: 'text', content: "Padh likh ke bera kya... chale gaya bidesh!", duration: 5000 },
+      { type: 'image', src: 'image4.avif', duration: 5000 },
+      { type: 'text', content: "Pehli car le kar bola — baapu tere liye!", duration: 5000 },
+      { type: 'image', src: 'image5.gif', duration: 5000 },
+      { type: 'text', content: "Aaj bhi tu hi mere liye bhagwaan se kam na baapu!", duration: 5000 }
+    ];
+
+    const container = document.getElementById('reelContainer');
+    let current = 0;
+
+    function showSlide(index) {
+      container.innerHTML = '';
+      const data = slidesData[index];
+      const slide = document.createElement('div');
+      slide.className = 'slide active';
+
+      if (data.type === 'text') {
+        const h = document.createElement('h1');
+        h.innerText = data.content;
+        slide.appendChild(h);
+      } else if (data.type === 'image') {
+        const img = document.createElement('img');
+        img.src = data.src;
+        slide.appendChild(img);
+      }
+      container.appendChild(slide);
+
+      setTimeout(() => {
+        slide.classList.remove('active');
+        current = (current + 1) % slidesData.length;
+        showSlide(current);
+      }, data.duration - 1000);
+    }
+
+    // Start the reel
+    showSlide(0);
+  </script>
+</body>
+</html>
