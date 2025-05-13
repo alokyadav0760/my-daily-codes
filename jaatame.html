@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Random Banger Visual Reel</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html, body {
+      height: 100%;
+      background: #f8f8f8;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      position: relative;
+    }
+
+    /* Front Page Styling */
+    #front-page {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  background: url("sunrise.webp") center/cover no-repeat;
+  background-blend-mode: overlay;
+  color: white;
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  opacity: 0.85;
+  transition: opacity 2s ease-in-out;
+}
+
+
+    #front-page.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* Video slideshow container */
+    #slideshow {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    video {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 1s ease-in-out, transform 1s ease;
+    }
+
+    video.active {
+      opacity: 1;
+      transform: scale(1.05);
+    }
+
+    /* Video transition effect */
+    video.transition-effect {
+      transform: scale(1.1) rotate(5deg);
+      opacity: 0.8;
+      transition: opacity 1s ease, transform 1s ease;
+    }
+
+    /* Optional: Light floating particles (optional aesthetic layer) */
+    .particles {
+      position: absolute;
+      inset: 0;
+      background: url("bokeh light.gif") center/cover no-repeat;
+      opacity: 0.1;
+      z-index: 0;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- Front page with quote -->
+  <div id="front-page">
+    <div>तुम मुझे गांव में क्यों नहीं ले जाना चाहते ?</div>
+  </div>
+
+  <!-- Slideshow with videos -->
+  <div id="slideshow">
+    <video id="video1" class="video-slide" autoplay muted loop>
+      <source src="video 1.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <video id="video2" class="video-slide" autoplay muted loop>
+      <source src="video 2.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <video id="video3" class="video-slide" autoplay muted loop>
+      <source src="video 3.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <video id="video4" class="video-slide" autoplay muted loop>
+      <source src="video 4.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <video id="video4" class="video-slide" autoplay muted loop>
+        <source src="video 5.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    <div class="particles"></div>
+  </div>
+
+  <script>
+    // Get the quote element and video elements
+    const frontPage = document.getElementById("front-page");
+    const videos = Array.from(document.querySelectorAll("video"));
+
+    // Function to hide the front page and show the videos after the quote disappears
+    setTimeout(() => {
+      frontPage.classList.add("hidden");
+      startVideoSequence();
+    }, 3000); // Quote stays visible for 3 seconds
+
+    // Function to play videos in sequence
+    let currentVideoIndex = 0;
+
+    function startVideoSequence() {
+      // Show the first video
+      videos[currentVideoIndex].classList.add("active");
+
+      // Add transition effect on each video change
+      setInterval(() => {
+        // Remove the active class and add the transition effect to the current video
+        videos[currentVideoIndex].classList.remove("active");
+        videos[currentVideoIndex].classList.add("transition-effect");
+
+        // Change video after 7 seconds
+        setTimeout(() => {
+          videos[currentVideoIndex].classList.remove("transition-effect");
+
+          // Move to the next video
+          currentVideoIndex = (currentVideoIndex + 1) % videos.length;
+
+          // Show the next video with a smooth transition
+          videos[currentVideoIndex].classList.add("active");
+        }, 1000); // Time for transition effect
+      }, 7000); // Change video every 7 seconds
+    }
+  </script>
+</body>
+</html>
