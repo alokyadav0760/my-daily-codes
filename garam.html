@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Garam Taseer Reel</title>
+  <style>
+    /* Import fun display font */
+    @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
+    /* Reset & Base */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      width: 100%; height: 100%; overflow: hidden;
+      background: #1a0000; color: #fff;
+      font-family: 'Helvetica Neue', sans-serif;
+      position: relative;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* Warm soft romantic gradient */
+    body::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(circle at center, #ffdad5, #ff9a8b, #ff6f61);
+      background-size: 200% 200%;
+      animation: warmGlow 15s ease-in-out infinite;
+      z-index: -3;
+      opacity: 0.8;
+    }
+    @keyframes warmGlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Slide setup */
+    .slide {
+      position: absolute; width: 100%; height: 100%;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; opacity: 0;
+      animation: fadeAll 20s ease-in-out forwards;
+      padding: 20px;
+    }
+    .slide1 { animation-delay: 0s; }
+    .slide2 { animation-delay: 4s; }
+    .slide3 { animation-delay: 8s; }
+    .slide4 { animation-delay: 12s; }
+    .slide5 { animation-delay: 16s; }
+
+    @keyframes fadeAll {
+      0%, 100% { opacity: 0; transform: scale(0.95); }
+      5%, 20% { opacity: 1; transform: scale(1); }
+      25% { opacity: 0; transform: scale(1.05); }
+    }
+
+    /* Ken Burns images */
+    .slide img {
+      max-width: 90%; max-height: 80%;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.5);
+      animation: zoomPan 16s ease-in-out forwards;
+    }
+    @keyframes zoomPan {
+      0% { transform: scale(1) translate(0,0); }
+      100% { transform: scale(1.1) translate(-3%, -3%); }
+    }
+
+    /* Text style */
+    .slide .text {
+      font-family: 'Pacifico', cursive;
+      font-size: 3.5vw; margin-top: 18px;
+      text-shadow: 2px 2px 6px rgba(0,0,0,0.7);
+    }
+  </style>
+</head>
+<body>
+  <!-- Slide 1: Steaming Chai -->
+  <div class="slide slide1">
+    <img src="chai.gif" alt="Steaming Chai">
+    <div class="text">Warmth in every sip</div>
+  </div>
+  <!-- Slide 2: Playful Push-Pull -->
+  <div class="slide slide2">
+    <img src="couple.gif" alt="Playful Couple">
+    <div class="text">Spice in every smile</div>
+  </div>
+  <!-- Slide 3: Flickering Flame -->
+  <div class="slide slide3">
+    <img src="flickering flame.gif" alt="Flickering Flame">
+    <div class="text">Burning passion</div>
+  </div>
+  <!-- Slide 4: Dhol Beats -->
+  <div class="slide slide4">
+    <img src="dhool beats.gif" alt="Dhol Beats">
+    <div class="text">Beat of our hearts</div>
+  </div>
+  <!-- Slide 5: Final Embrace -->
+  <div class="slide slide5">
+    <img src="couple embrace.gif" alt="Couple Embrace">
+    <div class="text">Our Garam Taseer ❤️</div>
+  </div>
+</body>
+</html>
