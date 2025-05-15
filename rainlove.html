@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rainy Love UI - Reelthecode</title>
+  <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+    }
+    body {
+      background: linear-gradient(to top, #2c3e50, #34495e);
+      height: 100vh;
+      overflow: hidden;
+      font-family: 'Poppins', sans-serif;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+      user-select: none;
+      position: relative;
+    }
+
+    .fade-in {
+      animation-fill-mode: forwards;
+      opacity: 0;
+    }
+
+    #she-text {
+      font-family: 'Indie Flower', cursive;
+      font-size: 2.2rem;
+      opacity: 0;
+      margin-bottom: 40px;
+      z-index: 10;
+      white-space: nowrap;
+      overflow: hidden;
+      border-right: 2px solid rgba(255,255,255,0.8);
+      animation: typing 3s steps(30, end), blink-caret 0.75s step-end infinite;
+    }
+
+    @keyframes typing {
+      from { width: 0; opacity: 1; }
+      to { width: 100%; opacity: 1; }
+    }
+
+    @keyframes blink-caret {
+      from, to { border-color: transparent }
+      50% { border-color: white }
+    }
+
+    .rain, .fog {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-size: cover;
+      animation-fill-mode: forwards;
+      z-index: 1;
+      filter: brightness(0.6);
+    }
+    .rain {
+      background-image: url("rain.gif");
+      opacity: 0;
+    }
+    .fog {
+      background-image: url("smoke.gif");
+      filter: brightness(0.5) opacity(0.35);
+      opacity: 0;
+    }
+
+    #weather-card {
+      width: 320px;
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(14px);
+      border-radius: 24px;
+      padding: 30px 20px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.45);
+      color: #dceeff;
+      font-weight: 600;
+      font-family: 'Poppins', sans-serif;
+      opacity: 0;
+      transform: translateY(30px);
+      animation-fill-mode: forwards;
+      z-index: 5;
+      position: relative;
+      animation: pulseGlow 4s infinite ease-in-out;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 20px rgba(255,255,255,0.1); }
+      50% { box-shadow: 0 0 40px rgba(255,255,255,0.25); }
+    }
+
+    #temp {
+      font-size: 5rem;
+      font-weight: 900;
+      letter-spacing: 6px;
+      text-shadow: 0 0 15px rgba(173, 216, 230, 0.8);
+      margin-bottom: 10px;
+      color: #a0d8f7;
+    }
+
+    #condition {
+      font-size: 1.6rem;
+      letter-spacing: 3px;
+      color: #c4e0f7;
+      margin-bottom: 15px;
+    }
+
+    #location {
+      font-size: 1.2rem;
+      letter-spacing: 2px;
+      color: #93b8d4;
+    }
+
+    .drip {
+      position: absolute;
+      width: 10px;
+      height: 30px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 50%;
+      animation: drip 2s infinite;
+      z-index: 6;
+      pointer-events: none;
+    }
+
+    .drip:nth-child(1) { left: 40%; top: 20%; animation-delay: 0s; }
+    .drip:nth-child(2) { left: 60%; top: 25%; animation-delay: 0.8s; }
+    .drip:nth-child(3) { left: 50%; top: 15%; animation-delay: 0.4s; }
+    .drip:nth-child(4) { left: 70%; top: 30%; animation-delay: 1.2s; }
+    .drip:nth-child(5) { left: 30%; top: 10%; animation-delay: 1.6s; }
+
+    #extra-content {
+      margin-top: 20px;
+      opacity: 0;
+      font-size: 1rem;
+      line-height: 1.6;
+      animation-fill-mode: forwards;
+      color: #a6d1ea;
+    }
+
+    #outro-text {
+      font-family: 'Indie Flower', cursive;
+      font-size: 1.2rem;
+      opacity: 0;
+      margin-top: 40px;
+      animation-fill-mode: forwards;
+      color: #a9c6dc;
+    }
+
+    #outro-text strong {
+      color: #e6f0fa;
+    }
+
+    .message-box {
+      margin-top: 30px;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      opacity: 0;
+    }
+
+    input[type="text"] {
+      padding: 8px 12px;
+      border-radius: 12px;
+      border: none;
+      width: 180px;
+    }
+
+    button {
+      padding: 8px 14px;
+      border-radius: 12px;
+      border: none;
+      background-color: #82c4ee;
+      color: #092f4f;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .user-msg {
+      position: absolute;
+      bottom: 100px;
+      font-size: 1.2rem;
+      color: #ffffff;
+      background: rgba(255,255,255,0.1);
+      padding: 10px 18px;
+      border-radius: 20px;
+      animation: floatUp 3s forwards;
+      opacity: 0;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+    @keyframes fadeOutUp {
+      to {
+        opacity: 0;
+        transform: translateY(-40px);
+      }
+    }
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes drip {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(100px); opacity: 0; }
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0); opacity: 0; }
+      20% { opacity: 1; }
+      80% { opacity: 1; }
+      100% { transform: translateY(-60px); opacity: 0; }
+    }
+
+    /* Heart particles */
+    .heart {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background: pink;
+      transform: rotate(45deg);
+      animation: floatHeart 6s linear infinite;
+      z-index: 0;
+    }
+
+    .heart::before,
+    .heart::after {
+      content: "";
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background: pink;
+      border-radius: 50%;
+    }
+
+    .heart::before {
+      top: -6px;
+      left: 0;
+    }
+
+    .heart::after {
+      left: -6px;
+      top: 0;
+    }
+
+    @keyframes floatHeart {
+      0% {
+        transform: translateY(0) rotate(45deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100vh) rotate(45deg);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="she-text">She: "I'm in love with you."</div>
+
+  <div class="rain"></div>
+  <div class="fog"></div>
+
+  <div id="weather-card">
+    <div class="drip"></div>
+    <div class="drip"></div>
+    <div class="drip"></div>
+    <div class="drip"></div>
+    <div class="drip"></div>
+
+    <div id="temp">20°C</div>
+    <div id="condition">Light Rain</div>
+    <div id="location">Mumbai, India</div>
+
+    <div id="extra-content">With every raindrop, my heart beats for you.</div>
+
+    <div class="message-box" id="message-box">
+      <input type="text" id="msgInput" placeholder="Type your message..." />
+      <button onclick="sendMsg()">Send</button>
+    </div>
+  </div>
+
+  <div id="outro-text">made with ❤️ by <strong>reelthecode</strong></div>
+
+  <script>
+    const sheText = document.getElementById('she-text');
+    const rain = document.querySelector('.rain');
+    const fog = document.querySelector('.fog');
+    const weatherCard = document.getElementById('weather-card');
+    const outroText = document.getElementById('outro-text');
+    const extraContent = document.getElementById('extra-content');
+    const messageBox = document.getElementById('message-box');
+
+    setTimeout(() => {
+      sheText.style.opacity = 1;
+    }, 500);
+
+    setTimeout(() => {
+      sheText.style.animation = 'fadeOutUp 1s forwards';
+    }, 4000);
+
+    setTimeout(() => {
+      rain.style.transition = 'opacity 2s ease-in-out';
+      rain.style.opacity = 0.35;
+    }, 4800);
+
+    setTimeout(() => {
+      fog.style.transition = 'opacity 2s ease-in-out';
+      fog.style.opacity = 0.2;
+    }, 6800);
+
+    setTimeout(() => {
+      weatherCard.style.animation = 'fadeInUp 2.5s forwards';
+    }, 8800);
+
+    setTimeout(() => {
+      extraContent.style.animation = 'fadeIn 2s forwards';
+      messageBox.style.animation = 'fadeIn 2s forwards';
+    }, 11300);
+
+    setTimeout(() => {
+      outroText.style.animation = 'fadeIn 3s forwards';
+    }, 13000);
+
+    function sendMsg() {
+      const input = document.getElementById('msgInput');
+      if (!input.value.trim()) return;
+
+      const msg = document.createElement('div');
+      msg.className = 'user-msg';
+      msg.textContent = input.value;
+      document.body.appendChild(msg);
+
+      input.value = '';
+
+      setTimeout(() => {
+        msg.remove();
+      }, 3000);
+    }
+
+    // Create heart particles
+    setInterval(() => {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.animationDuration = (4 + Math.random() * 3) + 's';
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 7000);
+    }, 300);
+  </script>
+</body>
+</html>
