@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fearless Reel</title>
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <style>
+    /* Full-screen mobile portrait (1080×1920) */
+    html, body {
+      margin: 0; padding: 0;
+      width: 100%; height: 100%;
+      background: #000;
+      overflow: hidden;
+      font-family: 'Courier New', monospace;
+    }
+    /* Question styling */
+    #question {
+      position: absolute;
+      top: 40%; left: 50%;
+      transform: translate(-50%, -50%);
+      color: #fff;
+      font-size: 2.8rem;
+      text-align: center;
+      opacity: 0;
+      z-index: 2;
+      padding: 0 1rem;
+    }
+    /* Reason container and image */
+    #reason-container {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: #000;
+      opacity: 0;
+      z-index: 1;
+    }
+    #reason-image {
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 70%;  /* Adjust width to keep it proportional */
+      height: 90%; /* Increase height for visibility */
+      object-fit: cover; /* Ensure the image covers the container without distortion */
+      object-position: top; /* Align the image at the top */
+      border-radius: 0.5rem;
+    }
+    #reason-text {
+      position: absolute;
+      top: 5%; left: 50%;
+      transform: translateX(-50%);
+      color: #FFD700;
+      font-size: 1.6rem;
+      text-align: center;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      z-index: 2;
+      opacity: 0;
+    }
+  </style>
+</head>
+<body>
+  <!-- Question -->
+  <div id="question">Why don't you fear anyone?</div>
+
+  <!-- Reason + image -->
+  <div id="reason-container">
+    <img id="reason-image" src="hanuman ji.jpg" alt="Reason Image" />
+    <div id="reason-text">Reason = My real Homie is here  </div>
+  </div>
+
+  <script>
+    const qEl = document.getElementById('question');
+    const rc = document.getElementById('reason-container');
+    const ri = document.getElementById('reason-image');
+    const rt = document.getElementById('reason-text');
+
+    const tl = gsap.timeline();
+
+    // Show question
+    tl.to(qEl, { opacity: 1, duration: 0.6 })
+      .to({}, { duration: 2.5 })        // hold
+      .to(qEl, { opacity: 0, duration: 0.6 })
+
+      // Show reason container
+      .to(rc, { opacity: 1, duration: 0.6 }, '+=0')
+      .to(ri, { opacity: 1, duration: 0.6 }, '<')
+      .to(rt, { opacity: 1, duration: 0.6 }, '<');
+  </script>
+</body>
+</html>
