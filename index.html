@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sucha Yaar Reel – Fixed Timing</title>
+
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=JetBrains+Mono&family=Playfair+Display&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    /* --------------------------------------------
+       VARIABLES & BASE RESET
+    --------------------------------------------- */
+    :root {
+      --neon-cyan: #00f0ff;
+      --warm-magenta: #ff3cac;
+      --soft-peach: #ffd3b6;
+      --font-code: 'JetBrains Mono', monospace;
+      --font-lyric: 'Great Vibes', cursive;
+      --font-serif: 'Playfair Display', serif;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #000;
+    }
+    img {
+      display: block;
+      max-width: 100%;
+    }
+    p, h1 {
+      margin: 0;
+    }
+
+    /* --------------------------------------------
+       1. INTRO OVERLAY (z-index: 100)
+       – default hidden; .show added at t = 0.2s
+    --------------------------------------------- */
+    #intro-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+    #intro-overlay.show {
+      display: flex;
+    }
+    #logo {
+      width: 30%;
+      opacity: 0;
+      animation: logoSlideIn 0.6s ease-out forwards;
+    }
+    @keyframes logoSlideIn {
+      0% {
+        transform: translateY(-20px);
+        opacity: 0;
+      }
+      100% {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+    #grain-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url("assets/grain.avif") repeat;
+      opacity: 0.2;
+      animation: grainAnim 0.4s infinite;
+      z-index: 101;
+    }
+    @keyframes grainAnim {
+      0%   { opacity: 0.2; }
+      50%  { opacity: 0.25; }
+      100% { opacity: 0.2; }
+    }
+    #light-leak {
+      position: absolute;
+      top: -20%;
+      left: -20%;
+      width: 140%;
+      height: 140%;
+      background: url("assets/light leak.avif") no-repeat center / cover;
+      opacity: 0;
+      animation: leakFlash 0.3s ease-in 0.3s forwards;
+      z-index: 102;
+    }
+    @keyframes leakFlash {
+      0%   { opacity: 0; }
+      50%  { opacity: 0.5; }
+      100% { opacity: 0; }
+    }
+
+    /* --------------------------------------------
+       2. CODE SCENE (z-index: 90)
+       – default hidden; .show added at t = 1.2s
+    --------------------------------------------- */
+    #code-scene {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #0a0a0a;
+      color: var(--neon-cyan);
+      font-family: var(--font-code);
+      font-size: 1.2rem;
+      overflow: hidden;
+      z-index: 90;
+    }
+    #code-scene.show {
+      display: block;
+    }
+    #typewriter {
+      position: absolute;
+      top: 45%;
+      left: 5%;
+      white-space: pre-wrap;
+      opacity: 0;
+      /* We’ll trigger this via JS, so no animation‐delay here */
+    }
+    .glitch {
+      animation: glitchAnim 0.2s ease-in-out;
+    }
+    @keyframes glitchAnim {
+      0%,100%   { clip-path: inset(0% 0% 0% 0%); transform: translateX(0); }
+      33%       { clip-path: inset(5% 0 15% 0); transform: translateX(-2px); }
+      66%       { clip-path: inset(15% 0 5% 0); transform: translateX(2px); }
+    }
+    #particle-rain {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background: url("assets/rain drop.avif") repeat;
+      animation: rainFall 2s linear infinite;
+      z-index: 91;
+    }
+    @keyframes rainFall {
+      0%   { background-position: 0 0; }
+      100% { background-position: 0 400px; }
+    }
+
+    /* --------------------------------------------
+       3. LYRIC OVERLAY (z-index: 80)
+       – default hidden; .show added at t = 8.0s
+    --------------------------------------------- */
+    #lyric-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 80;
+    }
+    #lyric-overlay.show {
+      display: block;
+    }
+    #lyric-line {
+      position: absolute;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.8);
+      font-family: var(--font-lyric);
+      font-size: 2.5rem;
+      color: var(--warm-magenta);
+      opacity: 0;
+      animation: lyricFade 2s ease-out forwards;
+      animation-fill-mode: forwards;
+    }
+    @keyframes lyricFade {
+      0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+      50%  { opacity: 1; transform: translate(-50%, -50%) scale(1.05); }
+      100% { opacity: 0; transform: translate(-50%, -60%) scale(1); }
+    }
+    #falling-leaves {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url("assets/falling leaves.avif") repeat;
+      opacity: 0.3;
+      animation: leavesFall 5s linear infinite;
+      z-index: 81;
+    }
+    @keyframes leavesFall {
+      0%   { background-position: 0 0; }
+      100% { background-position: 0 800px; }
+    }
+
+    /* --------------------------------------------
+       4. MONTAGE CONTAINER (z-index: 70)
+       – default hidden; .show added at t = 9.5s
+    --------------------------------------------- */
+    #montage-container {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      perspective: 1000px;
+      overflow: hidden;
+      z-index: 70;
+    }
+    #montage-container.show {
+      display: block;
+    }
+    #bg-gif,
+    #mg-gif {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+    }
+    #bg-gif {
+      background-image: url("assets/couple rain.webp");
+      filter: grayscale(80%) contrast(1.2) drop-shadow(0 0 8px rgba(0,0,0,0.5));
+      transform: translateZ(-100px) scale(1.1);
+    }
+    #mg-gif {
+      background-image: url("assets/raindrop glass.gif");
+      opacity: 0.7;
+      transform: translateZ(0);
+    }
+    #fog-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 110%;
+      height: 30%;
+      background: url("assets/fog.avif");
+      opacity: 0.2;
+      filter: blur(12px);
+      transform: translateY(20px);
+      z-index: 71;
+    }
+    #sticker-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      display: none;
+      z-index: 72;
+    }
+    .montage-glitch {
+      animation: montageGlitchAnim 0.6s ease-in-out;
+    }
+    @keyframes montageGlitchAnim {
+      0%,100%   { filter: none; }
+      25%       { filter: contrast(2) hue-rotate(20deg) saturate(2); }
+      50%       { filter: contrast(0.5) hue-rotate(-20deg) saturate(0.5); }
+      75%       { filter: contrast(1.5) hue-rotate(10deg) saturate(1.5); }
+    }
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      25%     { transform: translateX(-5px); }
+      75%     { transform: translateX(5px); }
+    }
+
+    /* --------------------------------------------
+       5. FREEZE OVERLAY (z-index: 85)
+       – default hidden; .show added at t = 14.5s
+    --------------------------------------------- */
+    #freeze-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 85;
+      animation: showFreeze 0.3s ease-out forwards;
+      opacity: 0;
+    }
+    #freeze-overlay.show {
+      display: block;
+    }
+    @keyframes showFreeze {
+      to { opacity: 1; }
+    }
+    #frozen-img,
+    #echo-img {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    #echo-img {
+      filter: hue-rotate(200deg) opacity(0.4);
+      transform: translate(-52%, -52%) scale(1.05);
+    }
+    #broken-heart {
+      position: absolute;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      animation: heartCrack 0.4s ease-out forwards;
+    }
+    @keyframes heartCrack {
+      0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+      50%  { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+      100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    }
+
+    /* --------------------------------------------
+       6. FINAL TEXT & CTA (z-index: 95)
+       – default hidden; .show added at t = 16.0s
+    --------------------------------------------- */
+    #final-text {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 95;
+      overflow: hidden;
+    }
+    #final-text.show {
+      display: flex;
+    }
+    #song-title {
+      font-family: var(--font-serif);
+      font-size: 3rem;
+      letter-spacing: 2px;
+      opacity: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      animation: showSongTitle 0.6s steps(10) 0s forwards;
+      animation-fill-mode: forwards;
+    }
+    @keyframes showSongTitle {
+      0%   { width: 0; opacity: 1; }
+      100% { width: auto; opacity: 1; }
+    }
+    @keyframes hideSongTitle {
+      0%   { width: auto; opacity: 1; }
+      100% { width: 0; opacity: 0; }
+    }
+    #final-logo {
+      width: 20%;
+      opacity: 0;
+      animation: logoPulse 1s ease-out 0.8s forwards;
+    }
+    @keyframes logoPulse {
+      0%   { transform: scale(0.8); opacity: 0; }
+      50%  { transform: scale(1.2); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    #cta-text {
+      font-family: var(--font-code);
+      font-size: 1rem;
+      opacity: 0;
+      animation: showCTA 0.5s ease-out 1.4s forwards;
+      animation-fill-mode: forwards;
+    }
+    @keyframes showCTA {
+      from { opacity: 0; transform: translateX(-20px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    /* --------------------------------------------
+       7. VIGNETTE OVERLAY (optional)
+    --------------------------------------------- */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(
+        ellipse at center,
+        rgba(0,0,0,0) 60%,
+        rgba(0,0,0,0.7) 100%
+      );
+      pointer-events: none;
+      mix-blend-mode: multiply;
+      z-index: 110;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 1. INTRO OVERLAY -->
+  <div id="intro-overlay">
+    <img src="assets/logo.png" id="logo" alt="reelthecode Logo" />
+    <div id="grain-layer"></div>
+    <div id="light-leak"></div>
+  </div>
+
+  <!-- 2. CODE-TYPING SCENE -->
+  <section id="code-scene">
+    <pre><code id="typewriter"></code></pre>
+    <div id="particle-rain"></div>
+  </section>
+
+  <!-- 3. LYRIC FLOATING OVERLAY -->
+  <div id="lyric-overlay">
+    <p id="lyric-line"></p>
+    <div id="falling-leaves"></div>
+  </div>
+
+  <!-- 4. MAIN GIF MONTAGE CONTAINER -->
+  <div id="montage-container">
+    <div id="bg-gif"></div>
+    <div id="mg-gif"></div>
+    <canvas id="sticker-canvas"></canvas>
+    <div id="fog-overlay"></div>
+  </div>
+
+  <!-- 5. FREEZE & ECHO OVERLAY -->
+  <div id="freeze-overlay">
+    <img src="assets/couple rain.webp" id="frozen-img" alt="Frozen Frame" />
+    <img src="assets/couple rain.webp" id="echo-img" alt="Echo Frame" />
+    <img src="assets/broken heart.webp" id="broken-heart" alt="Broken Heart" />
+  </div>
+
+  <!-- 6. FINAL TEXT & CTA -->
+  <div id="final-text">
+    <h1 id="song-title">Sucha Yaar 💔</h1>
+    <img src="assets/logo.png" id="final-logo" alt="reelthecode Logo" />
+    <p id="cta-text">Follow for more 💻❤️</p>
+  </div>
+
+  <script>
+    /* --------------------------------------------
+       SCRIPTS & TIMELINE CONTROL (with console.logs + adjusted delays)
+    --------------------------------------------- */
+    const timelineEvents = [
+      { t: 0.2,  fn: showIntroLogo },     // 0.2s: show intro
+      { t: 1.0,  fn: hideIntro },         // 1.0s: hide intro
+      { t: 1.2,  fn: startCodeScene },    // 1.2s: then show code scene
+      { t: 1.7,  fn: startTyping },       // 1.7s: start typing after code scene is visible
+      { t: 3.5,  fn: glitchEffect },      // 3.5s: glitch on code
+      { t: 5.0,  fn: colorShift },        // 5.0s: hue‑rotate code
+      { t: 6.0,  fn: lyricFloating },     // 6.0s: show first lyric (falling leaves)
+      { t: 7.5,  fn: flipToMontage },     // 7.5s: flip code → montage
+      { t: 8.0,  fn: startMontage1 },     // 8.0s: parallax tilt
+      { t: 9.5,  fn: lyricOverlay2 },     // 9.5s: show second lyric
+      { t: 10.2, fn: glitchMontage2 },    // 10.2s: montage glitch/shake
+      { t: 10.8, fn: startStickerStorm }, // 10.8s: petal storm
+      { t: 11.8, fn: freezeFrame },       // 11.8s: freeze + broken heart
+      { t: 12.4, fn: zoomOut },           // 12.4s: zoom out freeze
+      { t: 13.0, fn: showFinalText },     // 13.0s: final text
+      { t: 13.7, fn: hideFinalText },     // 13.7s: hide final text
+      { t: 14.0, fn: showLogoCTA },       // 14.0s: logo + CTA
+      { t: 15.0, fn: blackout }           // 15.0s: fade to black
+    ];
+
+    let startTime;
+    function animate(timestamp) {
+      if (!startTime) startTime = timestamp;
+      const elapsed = (timestamp - startTime) / 1000;
+      while (timelineEvents.length && elapsed >= timelineEvents[0].t) {
+        const event = timelineEvents.shift();
+        console.log(`⏱ Firing "${event.fn.name}" at t=${elapsed.toFixed(2)}s`);
+        event.fn();
+      }
+      if (timelineEvents.length) {
+        requestAnimationFrame(animate);
+      }
+    }
+    requestAnimationFrame(animate);
+
+    function showIntroLogo() {
+      console.log('👉 showIntroLogo()');
+      document.getElementById('intro-overlay').classList.add('show');
+    }
+    function hideIntro() {
+      console.log('👉 hideIntro()');
+      const intro = document.getElementById('intro-overlay');
+      intro.style.transition = 'opacity 0.3s';
+      intro.style.opacity = '0';
+      setTimeout(() => { intro.style.display = 'none'; }, 300);
+    }
+    function startCodeScene() {
+      console.log('👉 startCodeScene()');
+      document.getElementById('code-scene').classList.add('show');
+    }
+    function startTyping() {
+      console.log('👉 startTyping()');
+      const codeEl = document.getElementById('typewriter');
+      const codeText = `
+const heart = {
+  status: "broken",
+  owner: "sucha_yaar",
+};
+const love = true;
+let trust = 100;
+console.log("Sucha Yaar 💔");
+`;
+      codeEl.textContent = codeText;
+      codeEl.style.opacity = '1';
+      // Trigger typewriter effect via CSS width‐animation:
+      codeEl.style.animation = 'showCode 3s steps(40) forwards';
+      codeEl.style.animationFillMode = 'forwards';
+      // Then glitch a moment later:
+      setTimeout(() => {
+        console.log('  → glitchEffect() inside startTyping');
+        codeEl.classList.add('glitch');
+        setTimeout(() => codeEl.classList.remove('glitch'), 200);
+      }, 800);
+    }
+    function glitchEffect() {
+      console.log('👉 glitchEffect()');
+      const codeEl = document.getElementById('typewriter');
+      codeEl.classList.add('glitch');
+      setTimeout(() => codeEl.classList.remove('glitch'), 200);
+    }
+    function colorShift() {
+      console.log('👉 colorShift()');
+      const scene = document.getElementById('code-scene');
+      scene.style.transition = 'filter 0.4s';
+      scene.style.filter = 'hue-rotate(330deg)';
+    }
+    function lyricFloating() {
+      console.log('👉 lyricFloating()');
+      const lyric = document.getElementById('lyric-line');
+      lyric.textContent = "Dil nikkal jaanda ne…";
+      document.getElementById('lyric-overlay').classList.add('show');
+      lyric.style.animation = 'lyricFade 2s ease-out forwards';
+    }
+    function flipToMontage() {
+      console.log('👉 flipToMontage()');
+      const codeScene = document.getElementById('code-scene');
+      codeScene.style.transform = 'perspective(1000px) rotateY(-90deg)';
+      codeScene.style.transition = 'transform 0.5s ease-in-out';
+      setTimeout(() => codeScene.style.display = 'none', 500);
+
+      const mont = document.getElementById('montage-container');
+      mont.classList.add('show');
+      mont.style.transform = 'perspective(1000px) rotateY(90deg)';
+      requestAnimationFrame(() => {
+        mont.style.transform = 'perspective(1000px) rotateY(0deg)';
+        mont.style.transition = 'transform 0.5s ease-in-out';
+      });
+    }
+    function startMontage1() {
+      console.log('👉 startMontage1()');
+      const bg = document.getElementById('bg-gif');
+      const mg = document.getElementById('mg-gif');
+      bg.style.transform = 'translateZ(-100px) scale(1.1) translateX(-3px)';
+      mg.style.transform = 'translateZ(0) translateX(4px)';
+    }
+    function lyricOverlay2() {
+      console.log('👉 lyricOverlay2()');
+      const lyric2 = document.createElement('p');
+      lyric2.textContent = "Tere bina jiya na jaave…";
+      lyric2.style.cssText = `
+        position: absolute; top: 45%; left: 50%;
+        transform: translate(-50%, -50%) scale(0.9);
+        font-family: var(--font-lyric); font-size: 2rem;
+        color: var(--soft-peach); opacity: 0;
+        animation: lyricFade 2s ease-out forwards;
+      `;
+      document.getElementById('montage-container').appendChild(lyric2);
+    }
+    function glitchMontage2() {
+      console.log('👉 glitchMontage2()');
+      const mont = document.getElementById('montage-container');
+      mont.classList.add('montage-glitch');
+      setTimeout(() => mont.classList.remove('montage-glitch'), 600);
+      mont.style.animation = 'shake 0.2s ease-in-out';
+      setTimeout(() => mont.style.animation = '', 200);
+    }
+    function startStickerStorm() {
+      console.log('👉 startStickerStorm()');
+      const canvas = document.getElementById('sticker-canvas');
+      canvas.style.display = 'block';
+      initStickerParticles();
+    }
+    function freezeFrame() {
+      console.log('👉 freezeFrame()');
+      document.getElementById('montage-container').style.display = 'none';
+      const freeze = document.getElementById('freeze-overlay');
+      document.getElementById('frozen-img').src = 'assets/couple rain.webp';
+      document.getElementById('echo-img').src = 'assets/couple rain.webp';
+      freeze.classList.add('show');
+    }
+    function zoomOut() {
+      console.log('👉 zoomOut()');
+      const freeze = document.getElementById('freeze-overlay');
+      freeze.style.transition = 'transform 0.6s ease-out, opacity 0.6s ease-out';
+      freeze.style.transform = 'perspective(1200px) scale(0.8) rotateX(2deg)';
+      freeze.style.opacity = '0.6';
+    }
+    function showFinalText() {
+      console.log('👉 showFinalText()');
+      document.getElementById('freeze-overlay').style.display = 'none';
+      const final = document.getElementById('final-text');
+      final.classList.add('show');
+      document.getElementById('song-title').style.animation = 'showSongTitle 0.6s steps(10) forwards';
+    }
+    function hideFinalText() {
+      console.log('👉 hideFinalText()');
+      const title = document.getElementById('song-title');
+      title.style.animation = 'hideSongTitle 0.5s steps(10) forwards';
+    }
+    function showLogoCTA() {
+      console.log('👉 showLogoCTA()');
+      document.getElementById('final-logo').style.animation = 'logoPulse 1s ease-out forwards';
+      document.getElementById('cta-text').style.animation = 'showCTA 0.5s ease-out forwards';
+    }
+    function blackout() {
+      console.log('👉 blackout()');
+      const final = document.getElementById('final-text');
+      final.style.transition = 'opacity 0.5s ease-out';
+      final.style.opacity = '0';
+      setTimeout(() => final.style.display = 'none', 500);
+    }
+
+    /* --------------------------------------------
+       STICKER PARTICLE SYSTEM (CANVAS)
+    --------------------------------------------- */
+    let stickers = [];
+
+    function initStickerParticles() {
+      console.log('  → initStickerParticles()');
+      const canvas = document.getElementById('sticker-canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      // Explicit array of all 10 petal image paths:
+      const petalPaths = [
+        'assets/Petals/petal0.png',
+        'assets/Petals/petal1.png',
+        'assets/Petals/petal2.png',
+        'assets/Petals/petal3.png',
+        'assets/Petals/petal4.png',
+        'assets/Petals/petal5.png',
+        'assets/Petals/petal6.png',
+        'assets/Petals/petal7.png',
+        'assets/Petals/petal8.png',
+        'assets/Petals/petal9.png'
+      ];
+
+      for (let i = 0; i < 100; i++) {
+        // Pick one of the ten at random:
+        const randomIndex = Math.floor(Math.random() * petalPaths.length);
+        const img = new Image();
+        img.src = petalPaths[randomIndex];
+
+        stickers.push({
+          x: Math.random() * canvas.width,
+          y: -20,
+          vx: (Math.random() - 0.5) * 1.5,
+          vy: Math.random() * 2 + 1,
+          rot: Math.random() * 360,
+          scale: Math.random() * 0.5 + 0.4,
+          img: img
+        });
+      }
+
+      requestAnimationFrame(updateStickers);
+    }
+
+    function updateStickers() {
+      const canvas = document.getElementById('sticker-canvas');
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      stickers.forEach((s, i) => {
+        s.x += s.vx;
+        s.y += s.vy;
+        s.rot += 0.5;
+        ctx.save();
+        ctx.translate(s.x, s.y);
+        ctx.rotate((s.rot * Math.PI) / 180);
+        ctx.drawImage(
+          s.img,
+          -16 * s.scale,
+          -16 * s.scale,
+          32 * s.scale,
+          32 * s.scale
+        );
+        ctx.restore();
+        if (s.y > canvas.height + 20) {
+          stickers.splice(i, 1);
+        }
+      });
+
+      if (stickers.length) requestAnimationFrame(updateStickers);
+    }
+  </script>
+</body>
+</html>
